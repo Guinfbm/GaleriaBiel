@@ -1,0 +1,132 @@
+════════════════════════════════════════════════════════════════
+    📦 INSTALAR IMGBIEL NO GOOGLE CHROME - PASSO A PASSO
+════════════════════════════════════════════════════════════════
+
+🎯 OBJETIVO:
+Usar o ImgBiel como extensão do Chrome para acessar a galeria
+diretamente no navegador.
+
+════════════════════════════════════════════════════════════════
+PASSO 1: PREPARAR O SERVIDOR
+════════════════════════════════════════════════════════════════
+
+1. Abra PowerShell ou CMD na pasta imgBiel
+2. Execute:
+   
+   npm run server
+
+3. Você verá a mensagem:
+   🚀 ImgBiel Servidor rodando em http://localhost:3000
+
+⚠️  NÃO FECHE ESTE TERMINAL! Deixe rodando enquanto usar.
+
+════════════════════════════════════════════════════════════════
+PASSO 2: INSTALAR NO CHROME
+════════════════════════════════════════════════════════════════
+
+1. Abra o GOOGLE CHROME
+
+2. Digite na barra de endereço:
+   chrome://extensions/
+
+3. Ative "MODO DE DESENVOLVEDOR" 
+   (botão no canto superior direito)
+
+4. Clique em "CARREGAR EXTENSÃO SEM EMPACOTAMENTO"
+
+5. Navegue até a pasta:
+   C:\Users\guilh\Desktop\imgBiel\chrome-extension
+
+6. Selecione a pasta e clique "Selecionar Pasta"
+
+✅ A extensão aparecerá com o ícone 🖼️
+
+════════════════════════════════════════════════════════════════
+PASSO 3: USAR A EXTENSÃO
+════════════════════════════════════════════════════════════════
+
+1. Clique no ícone 🖼️ da extensão (canto superior direito)
+
+2. Aparecerá um popup com:
+   - 📱 Abrir Galeria
+   - 🚀 Iniciar Servidor
+
+3. Clique "📱 Abrir Galeria"
+
+4. A galeria abrirá em uma nova aba!
+
+════════════════════════════════════════════════════════════════
+FUNCIONALIDADES DISPONÍVEIS
+════════════════════════════════════════════════════════════════
+
+✨ 3D Flip interativo
+   └─ Clique em uma imagem e gire para ver o verso
+
+📁 Sincronização de Pasta
+   └─ Selecione uma pasta do seu computador
+   └─ Imagens aparecem automaticamente
+
+📝 Editor de Texto com Formatação
+   └─ Clique "✏️ Editar" no verso
+   └─ Adicione texto com B, I, U
+   └─ Clique "💾 Salvar"
+
+⏱️ Auto-slideshow
+   └─ Após 5 minutos de inatividade
+   └─ Redireciona para "Nova pasta"
+
+════════════════════════════════════════════════════════════════
+ARQUIVOS IMPORTANTES
+════════════════════════════════════════════════════════════════
+
+📁 chrome-extension/
+   ├─ manifest.json      ← Configuração da extensão
+   ├─ popup.html        ← Interface (popup)
+   ├─ popup.js          ← Controle do popup
+   ├─ background.js     ← Service worker
+   └─ icons/            ← Ícones da extensão
+
+📄 server.js            ← Servidor Node.js
+
+🚀 iniciar-servidor.bat ← Atalho rápido para iniciar
+
+════════════════════════════════════════════════════════════════
+TROUBLESHOOTING
+════════════════════════════════════════════════════════════════
+
+❌ "Extensão não aparece no Chrome?"
+→ Verifique se "Modo de Desenvolvedor" está ATIVADO
+→ Tente novamente carregar a extensão
+
+❌ "Servidor não está rodando"
+→ Execute no terminal: npm run server
+→ Verifique se a porta 3000 não está ocupada
+
+❌ "Erro ao conectar"
+→ Certifique-se que o terminal do servidor está aberto
+→ Aguarde 2 segundos e tente novamente
+
+❌ "Imagens não aparecem"
+→ Selecione a pasta correta via botão 📁
+→ Clique 🔄 Recarregar
+
+════════════════════════════════════════════════════════════════
+ATALHO RÁPIDO
+════════════════════════════════════════════════════════════════
+
+Para iniciar tudo mais rápido, execute:
+   iniciar-servidor.bat
+
+Ele fará tudo automaticamente!
+
+════════════════════════════════════════════════════════════════
+DÚVIDAS?
+════════════════════════════════════════════════════════════════
+
+Verifique:
+1. Node.js instalado: node --version
+2. npm instalado: npm --version
+3. Porta 3000 disponível: netstat -ano | findstr :3000
+4. Pasta chrome-extension existe
+
+════════════════════════════════════════════════════════════════

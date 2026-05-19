@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "ImgBiel Gallery",
+  "version": "1.0.0",
+  "description": "Galeria de imagens com sincronização de pasta, editor 3D e auto-slideshow",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://localhost:3000/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "ImgBiel - Abrir Galeria"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

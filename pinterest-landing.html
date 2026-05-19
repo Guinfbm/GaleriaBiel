@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria Inspirada - Pinterest Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;500;600&display=swap');
+
+        :root {
+            --primary-pink: #D4637B;
+            --dark-pink: #B8506B;
+            --light-beige: #F5EFE7;
+            --dark-black: #1A1A1A;
+            --accent-black: #2D2D2D;
+            --soft-gray: #E8E4DE;
+            --highlight: #FFB6C1;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--light-beige) 0%, #F9F6F1 100%);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header - Removido */
+
+        /* Container principal */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 12px;
+        }
+
+        /* Grid Pinterest - Mais compacto */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 8px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cards de imagem */
+        .pin {
+            position: relative;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            animation: slideUp 0.6s ease-out backwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .pin:nth-child(1) { animation-delay: 0.1s; }
+        .pin:nth-child(2) { animation-delay: 0.15s; }
+        .pin:nth-child(3) { animation-delay: 0.2s; }
+        .pin:nth-child(4) { animation-delay: 0.25s; }
+        .pin:nth-child(5) { animation-delay: 0.3s; }
+        .pin:nth-child(6) { animation-delay: 0.35s; }
+        .pin:nth-child(n+7) { animation-delay: 0.4s; }
+
+        .pin:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(212, 99, 123, 0.15);
+        }
+
+        .pin-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+            cursor: pointer;
+        }
+
+        /* Badge de Favoritos */
+        .favorite-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--primary-pink);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 50px;
+            font-size: 0.85em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: 0;
+            transform: scale(0.8) translateY(-20px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(212, 99, 123, 0.3);
+            z-index: 10;
+        }
+
+        .favorite-badge.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        .favorite-badge::before {
+            content: '♥';
+            font-size: 1.1em;
+            display: inline-block;
+            animation: heartBeat 0.6s ease;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Overlay decorativo no hover */
+        .pin-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(212, 99, 123, 0) 0%, rgba(212, 99, 123, 0.15) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            border-radius: 16px;
+        }
+
+        .pin:hover .pin-overlay {
+            opacity: 1;
+        }
+
+        /* Modal Lightbox */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            animation: zoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8) translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s ease;
+            color: var(--dark-black);
+            font-weight: bold;
+        }
+
+        .modal-close:hover {
+            background: white;
+            transform: rotate(90deg);
+        }
+
+        /* Controles do Modal */
+        .modal-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 1001;
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+        }
+
+        .modal-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95em;
+            color: var(--dark-black);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Editor de Texto */
+        .text-editor {
+            position: absolute;
+            bottom: 100px;
+            left: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .text-editor.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .editor-title {
+            font-weight: 600;
+            color: var(--dark-black);
+            margin-bottom: 12px;
+            font-size: 0.9em;
+        }
+
+        .editor-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .editor-textarea {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--soft-gray);
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95em;
+            resize: vertical;
+            min-height: 80px;
+            transition: border-color 0.2s ease;
+            color: var(--dark-black);
+        }
+
+        .editor-textarea:focus {
+            outline: none;
+            border-color: var(--primary-pink);
+        }
+
+        .color-picker-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .color-label {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: var(--accent-black);
+            white-space: nowrap;
+        }
+
+        .color-preset {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .color-preset:hover {
+            transform: scale(1.1);
+        }
+
+        .color-preset.active {
+            border-color: var(--dark-black);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .editor-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .editor-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.2s ease;
+        }
+
+        .editor-btn-save {
+            background: var(--primary-pink);
+            color: white;
+        }
+
+        .editor-btn-save:hover {
+            background: var(--dark-pink);
+            transform: translateY(-2px);
+        }
+
+        .editor-btn-cancel {
+            background: var(--soft-gray);
+            color: var(--dark-black);
+        }
+
+        .editor-btn-cancel:hover {
+            background: #ddd;
+        }
+
+        /* Imagem com transformação */
+        .modal-image.flipped {
+            transform: scaleX(-1);
+        }
+
+        /* Indicador de Flip */
+        .flip-indicator {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(212, 99, 123, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 24px;
+            font-size: 0.85em;
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(8px);
+            z-index: 1001;
+            animation: slideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .flip-indicator.active {
+            display: flex;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Info Section - Removida */
+
+        /* Elementos decorativos */
+        .decoration {
+            position: fixed;
+            font-size: 4em;
+            opacity: 0.08;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .deco-1 { top: 10%; left: 5%; }
+        .deco-2 { top: 30%; right: 8%; }
+        .deco-3 { bottom: 15%; left: 10%; }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 6px;
+            }
+
+            .pin-image {
+                height: 280px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 4px;
+            }
+
+            .pin-image {
+                height: 200px;
+            }
+
+            .favorite-badge {
+                font-size: 0.75em;
+                padding: 6px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration deco-1">🌸</div>
+    <div class="decoration deco-2">✨</div>
+    <div class="decoration deco-3">🎨</div>
+
+
+
+    <div class="container">
+        <div class="gallery" id="gallery"></div>
+    </div>
+
+    <!-- Modal Lightbox -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <img class="modal-image" id="modalImage" src="" alt="">
+            
+            <!-- Indicador de Flip -->
+            <div class="flip-indicator" id="flipIndicator">
+                🔄 Virada
+            </div>
+            
+            <!-- Controles do Modal -->
+            <div class="modal-controls">
+                <button class="modal-btn" id="flipBtn" title="Virar imagem">
+                    🔄 Virar
+                </button>
+                <button class="modal-btn" id="textBtn" title="Adicionar texto">
+                    ✏️ Adicionar Texto
+                </button>
+            </div>
+
+            <!-- Editor de Texto -->
+            <div class="text-editor" id="textEditor">
+                <div class="editor-title">Adicionar Mensagem</div>
+                
+                <div class="editor-row">
+                    <textarea class="editor-textarea" id="messageText" placeholder="Digite sua mensagem aqui..."></textarea>
+                </div>
+
+                <div class="editor-row">
+                    <span class="color-label">Cor de fundo:</span>
+                    <div class="color-picker-container">
+                        <div class="color-preset active" style="background: #D4637B;" data-color="#D4637B" title="Pink"></div>
+                        <div class="color-preset" style="background: #B8506B;" data-color="#B8506B" title="Dark Pink"></div>
+                        <div class="color-preset" style="background: #F5EFE7;" data-color="#F5EFE7;" title="Beige"></div>
+                        <div class="color-preset" style="background: #1A1A1A;" data-color="#1A1A1A;" title="Black"></div>
+                        <div class="color-preset" style="background: #E8E4DE;" data-color="#E8E4DE;" title="Soft Gray"></div>
+                        <div class="color-preset" style="background: #FFB6C1;" data-color="#FFB6C1;" title="Light Pink"></div>
+                    </div>
+                </div>
+
+                <div class="editor-buttons">
+                    <button class="editor-btn editor-btn-save" id="saveMsgBtn">Salvar</button>
+                    <button class="editor-btn editor-btn-cancel" id="cancelMsgBtn">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados de imagens (será preenchido dinamicamente)
+        let pins = [];
+
+        // Carregar imagens da API
+        async function loadImages() {
+            try {
+                const response = await fetch('/api/images');
+                if (!response.ok) throw new Error('Erro ao carregar imagens');
+                pins = await response.json();
+                console.log(`✅ ${pins.length} imagens carregadas`);
+                renderGallery();
+            } catch (error) {
+                console.error('❌ Erro ao carregar imagens:', error);
+                // Fallback: mostrar mensagem ao usuário
+                const gallery = document.getElementById('gallery');
+                gallery.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #D4637B; font-size: 18px;">⚠️ Erro ao carregar imagens. Verifique se o servidor está rodando.</div>';
+            }
+        }
+
+        // Estado de favoritos (armazenado em localStorage)
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || {};
+        
+        // Estado de mensagens das imagens
+        const imageMsgs = JSON.parse(localStorage.getItem('imageMsgs')) || {};
+        
+        // Variável para rastrear a imagem atual aberta
+        let currentImageUrl = null;
+        let selectedColor = '#D4637B';
+
+        // Renderizar galeria
+        function renderGallery() {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = '';
+
+            pins.forEach(pin => {
+                const pinElement = document.createElement('div');
+                pinElement.className = 'pin';
+                pinElement.innerHTML = `
+                    <div style="position: relative;">
+                        <img src="${pin.image}" alt="${pin.title}" class="pin-image">
+                        <div class="pin-overlay"></div>
+                        <div class="favorite-badge" data-pin="${pin.id}">
+                            <span class="count">${favorites[pin.id] || 1}</span>
+                        </div>
+                `;
+
+                // Evento de clique com botão esquerdo
+                pinElement.addEventListener('mousedown', (e) => {
+                    if (e.button === 0) { // Botão esquerdo
+                        e.preventDefault();
+                        toggleFavorite(pin.id);
+                    }
+                });
+
+                // Evento de clique na imagem para abrir modal
+                const pinImage = pinElement.querySelector('.pin-image');
+                pinImage.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openModal(pin.image);
+                });
+
+                gallery.appendChild(pinElement);
+            });
+        }
+
+        // Alternar favorito
+        function toggleFavorite(pinId) {
+            // Incrementar ou inicializar favoritos
+            if (!favorites[pinId]) {
+                favorites[pinId] = 1;
+            } else {
+                favorites[pinId]++;
+            }
+
+            // Salvar no localStorage
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+
+            // Atualizar UI com animação
+            const badge = document.querySelector(`[data-pin="${pinId}"]`);
+            if (badge) {
+                const count = badge.querySelector('.count');
+                count.textContent = favorites[pinId];
+
+                // Remover classe ativa
+                badge.classList.remove('active');
+
+                // Forçar reflow para reiniciar animação
+                void badge.offsetWidth;
+
+                // Adicionar classe ativa
+                badge.classList.add('active');
+
+                // Remover após 2 segundos
+                setTimeout(() => {
+                    badge.classList.remove('active');
+                }, 2000);
+            }
+        }
+
+        // Funções do Modal
+        function openModal(imageSrc) {
+            const modal = document.getElementById('modal');
+            const modalImage = document.getElementById('modalImage');
+            const messageText = document.getElementById('messageText');
+            const textEditor = document.getElementById('textEditor');
+            const flipIndicator = document.getElementById('flipIndicator');
+            
+            currentImageUrl = imageSrc;
+            modalImage.src = imageSrc;
+            modalImage.classList.remove('flipped');
+            flipIndicator.classList.remove('active');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Carregar mensagem existente se houver
+            if (imageMsgs[imageSrc]) {
+                messageText.value = imageMsgs[imageSrc].message;
+                selectedColor = imageMsgs[imageSrc].color || '#D4637B';
+                updateColorPresets();
+            } else {
+                messageText.value = '';
+                selectedColor = '#D4637B';
+                updateColorPresets();
+            }
+            
+            // Fechar editor de texto ao abrir modal
+            textEditor.classList.remove('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            const textEditor = document.getElementById('textEditor');
+            modal.classList.remove('active');
+            textEditor.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Allow scrolling
+            currentImageUrl = null;
+        }
+
+        function flipImage() {
+            const modalImage = document.getElementById('modalImage');
+            const flipIndicator = document.getElementById('flipIndicator');
+            modalImage.classList.toggle('flipped');
+            flipIndicator.classList.toggle('active');
+        }
+
+        function toggleTextEditor() {
+            const textEditor = document.getElementById('textEditor');
+            textEditor.classList.toggle('active');
+        }
+
+        function updateColorPresets() {
+            const presets = document.querySelectorAll('.color-preset');
+            presets.forEach(preset => {
+                const color = preset.getAttribute('data-color');
+                if (color === selectedColor) {
+                    preset.classList.add('active');
+                } else {
+                    preset.classList.remove('active');
+                }
+            });
+        }
+
+        function saveMessage() {
+            const messageText = document.getElementById('messageText').value;
+            
+            if (currentImageUrl) {
+                if (messageText.trim()) {
+                    imageMsgs[currentImageUrl] = {
+                        message: messageText,
+                        color: selectedColor
+                    };
+                } else {
+                    delete imageMsgs[currentImageUrl];
+                }
+                
+                localStorage.setItem('imageMsgs', JSON.stringify(imageMsgs));
+                toggleTextEditor();
+            }
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            // Carregar imagens da API
+            loadImages();
+
+            // Fechar modal ao clicar no botão X
+            const modalClose = document.getElementById('modalClose');
+            modalClose.addEventListener('click', closeModal);
+
+            // Fechar modal ao clicar fora da imagem
+            const modal = document.getElementById('modal');
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Fechar modal com tecla ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+
+            // Botão de flip
+            const flipBtn = document.getElementById('flipBtn');
+            flipBtn.addEventListener('click', flipImage);
+
+            // Botão de adicionar texto
+            const textBtn = document.getElementById('textBtn');
+            textBtn.addEventListener('click', toggleTextEditor);
+
+            // Botão de salvar mensagem
+            const saveMsgBtn = document.getElementById('saveMsgBtn');
+            saveMsgBtn.addEventListener('click', saveMessage);
+
+            // Botão de cancelar
+            const cancelMsgBtn = document.getElementById('cancelMsgBtn');
+            cancelMsgBtn.addEventListener('click', toggleTextEditor);
+
+            // Seletor de cores
+            const colorPresets = document.querySelectorAll('.color-preset');
+            colorPresets.forEach(preset => {
+                preset.addEventListener('click', (e) => {
+                    selectedColor = e.target.getAttribute('data-color');
+                    updateColorPresets();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

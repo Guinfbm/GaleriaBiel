@@ -1,0 +1,45 @@
+{
+  "name": "imgbiel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "server": "node server.js",
+    "build": "electron-builder",
+    "dist": "electron-builder --publish never",
+    "pack": "electron-builder --dir",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "build": {
+    "appId": "com.imgbiel.app",
+    "productName": "ImgBiel",
+    "directories": {
+      "buildResources": "app"
+    },
+    "win": {
+      "target": [
+        "portable"
+      ]
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "app/**/*"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^4.22.2"
+  },
+  "devDependencies": {
+    "asar": "^3.2.0",
+    "electron": "^42.1.0",
+    "electron-builder": "^26.8.1",
+    "pkg": "^5.8.1"
+  }
+}

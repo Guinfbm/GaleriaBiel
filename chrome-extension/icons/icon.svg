@@ -1,0 +1,10 @@
+<!-- 
+Ícones da extensão ImgBiel (base64 encodados)
+Para criar verdadeiros ícones PNG, execute:
+node create-icons.js
+-->
+
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+  <rect width="16" height="16" fill="#667eea" rx="3"/>
+  <text x="8" y="12" font-size="10" fill="white" text-anchor="middle" font-weight="bold">I</text>
+</svg>

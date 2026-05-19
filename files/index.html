@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria Inspirada - Pinterest Style</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Decorações com flores ASCII coloridas -->
+    <div class="decoration deco-1">&#10052;</div>
+    <div class="decoration deco-2">&#10047;</div>
+    <div class="decoration deco-3">&#10048;</div>
+    <div class="decoration deco-4">&#10052;</div>
+    <div class="decoration deco-5">&#10047;</div>
+    <div class="decoration deco-6">&#10048;</div>
+    <div class="decoration deco-7">&#10052;</div>
+    <div class="decoration deco-8">&#10047;</div>
+    <div class="decoration deco-9">&#10048;</div>
+    <div class="decoration deco-10">&#10052;</div>
+    <div class="decoration deco-11">&#10047;</div>
+    <div class="decoration deco-12">&#10048;</div>
+    <div class="decoration deco-13">&#10052;</div>
+    <div class="decoration deco-14">&#10047;</div>
+    <div class="decoration deco-15">&#10048;</div>
+    <div class="decoration deco-16">&#10052;</div>
+    <div class="decoration deco-17">&#10047;</div>
+    <div class="decoration deco-18">&#10048;</div>
+    <div class="decoration deco-19">&#10052;</div>
+    <div class="decoration deco-20">&#10047;</div>
+    <div class="decoration deco-21">&#10048;</div>
+    <div class="decoration deco-22">&#10052;</div>
+    <div class="decoration deco-23">&#10047;</div>
+    <div class="decoration deco-24">&#10048;</div>
+    <div class="decoration deco-25">&#10052;</div>
+    <div class="decoration deco-26">&#10047;</div>
+    <div class="decoration deco-27">&#10048;</div>
+    <div class="decoration deco-28">&#10052;</div>
+    <div class="decoration deco-29">&#10047;</div>
+    <div class="decoration deco-30">&#10048;</div>
+    <div class="decoration deco-31">&#10052;</div>
+    <div class="decoration deco-32">&#10047;</div>
+    <div class="decoration deco-33">&#10048;</div>
+    <div class="decoration deco-34">&#10052;</div>
+    <div class="decoration deco-35">&#10047;</div>
+    <div class="decoration deco-36">&#10048;</div>
+    <div class="decoration deco-37">&#10052;</div>
+    <div class="decoration deco-38">&#10047;</div>
+    <div class="decoration deco-39">&#10048;</div>
+    <div class="decoration deco-40">&#10052;</div>
+    <div class="decoration deco-1">&#10052;</div>
+    <div class="decoration deco-2">&#10047;</div>
+    <div class="decoration deco-3">&#10048;</div>
+    <div class="decoration deco-4">&#10052;</div>
+    <div class="decoration deco-5">&#10047;</div>
+    <div class="decoration deco-6">&#10048;</div>
+    <div class="decoration deco-7">&#10052;</div>
+    <div class="decoration deco-8">&#10047;</div>
+    <div class="decoration deco-9">&#10048;</div>
+    <div class="decoration deco-10">&#10052;</div>
+    <div class="decoration deco-11">&#10047;</div>
+    <div class="decoration deco-12">&#10048;</div>
+    <div class="decoration deco-13">&#10052;</div>
+    <div class="decoration deco-14">&#10047;</div>
+    <div class="decoration deco-15">&#10048;</div>
+    <div class="decoration deco-16">&#10052;</div>
+    <div class="decoration deco-17">&#10047;</div>
+    <div class="decoration deco-18">&#10048;</div>
+    <div class="decoration deco-19">&#10052;</div>
+    <div class="decoration deco-20">&#10047;</div>
+    <!-- Upload Area -->
+    <div class="upload-area">
+        <div class="folder-controls">
+            <button class="folder-btn" id="selectFolderBtn">📁 Selecionar Pasta</button>
+            <button class="folder-btn" id="refreshBtn">🔄 Recarregar</button>
+            <span class="folder-status" id="folderStatus">Nenhuma pasta selecionada</span>
+        </div>
+        <span class="upload-label">📸 Adicione suas imagens:</span>
+        <button class="upload-btn" id="uploadBtn">+ Selecionar Fotos</button>
+        <input type="file" id="uploadInput" class="upload-input" multiple accept="image/*">
+        <span class="upload-info">ou arraste imagens para a tela</span>
+    </div>
+
+    <!-- Drop Zone -->
+    <div class="drop-zone" id="dropZone">
+        <div class="drop-zone-content">
+            <h2>📥 Solte as imagens aqui</h2>
+            <p>Qualquer formato de imagem (JPG, PNG, GIF, WebP...)</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="gallery" id="gallery"></div>
+    </div>
+
+    <!-- Modal Lightbox -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            
+            <!-- Flip Container 3D -->
+            <div class="flip-container" id="flipContainer">
+                <!-- Front: Imagem -->
+                <div class="flip-front">
+                    <img class="modal-image" id="modalImage" src="" alt="">
+                    <div class="flip-indicator" id="flipIndicator">
+                        🔄 Clique para virar
+                    </div>
+                </div>
+                
+                <!-- Back: Texto -->
+                <div class="flip-back">
+                    <!-- Visualização do texto (modo visualização) -->
+                    <div class="back-view" id="backView">
+                        <div class="view-content" id="viewContent"></div>
+                        <button class="view-edit-btn" id="viewEditBtn">✏️ Editar</button>
+                    </div>
+
+                    <!-- Editor (modo edição) -->
+                    <div class="back-edit" id="backEdit" style="display: none;">
+                        <div class="back-content">
+                            <!-- Toolbar -->
+                            <div class="text-toolbar">
+                                <button class="toolbar-btn" id="boldBtn" title="Negrito (Ctrl+B)">
+                                    <strong>B</strong>
+                                </button>
+                                <button class="toolbar-btn" id="italicBtn" title="Itálico (Ctrl+I)">
+                                    <em>I</em>
+                                </button>
+                                <button class="toolbar-btn" id="underlineBtn" title="Sublinhado (Ctrl+U)">
+                                    <u>U</u>
+                                </button>
+                                <div class="toolbar-separator"></div>
+                                <button class="toolbar-btn" id="clearFormatBtn" title="Limpar formatação">
+                                    🧹 Limpar
+                                </button>
+                            </div>
+
+                            <!-- Editor -->
+                            <div class="text-editor-container">
+                                <div class="text-editor-area" id="textEditorArea" contenteditable="true"></div>
+                            </div>
+
+                            <!-- Botões de ação -->
+                            <div class="back-actions">
+                                <button class="back-btn back-save" id="backSaveBtn">💾 Salvar</button>
+                                <button class="back-btn back-cancel" id="backCancelBtn">✕ Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles do Modal -->
+            <div class="modal-controls">
+                <button class="modal-btn" id="flipBtn" title="Virar imagem">
+                    🔄 Virar
+                </button>
+                <button class="modal-btn" id="textBtn" title="Adicionar texto">
+                    ✏️ Editar Texto
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
